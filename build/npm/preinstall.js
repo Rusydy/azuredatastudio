@@ -10,8 +10,8 @@ const minorNodeVersion = parseInt(nodeVersion[2]);
 const patchNodeVersion = parseInt(nodeVersion[3]);
 
 if (!process.env['VSCODE_SKIP_NODE_VERSION_CHECK']) {
-	if (majorNodeVersion < 20) {
-		console.error('\x1b[1;31m*** Please use latest Node.js v20 LTS for development.\x1b[0;0m');
+	if (majorNodeVersion < 22) {
+		console.error('\x1b[1;31m*** Please use Node.js v22 or newer for development (see .nvmrc).\x1b[0;0m');
 		throw new Error();
 	}
 }

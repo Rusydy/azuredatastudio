@@ -21,6 +21,7 @@ export function createAddConnectionStringStep(projectFolder: string, connectionI
 		// priority number is set to be lower than OpenFolderStep in vscode-azurefunctions
 		// https://github.com/microsoft/vscode-azurefunctions/blob/main/src/commands/createNewProject/OpenFolderStep.ts#L11
 		public priority: number = 240;
+		public options = {};
 
 		public async execute(): Promise<void> {
 			let settingsFile = await azureFunctionsUtils.getSettingsFile(projectFolder);

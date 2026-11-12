@@ -12,7 +12,7 @@ import { LoopbackAuthServer } from './node/authServer';
 import { base64Decode } from './node/buffer';
 import { fetching } from './node/fetch';
 import { UriEventHandler } from './UriEventHandler';
-import TelemetryReporter from '@vscode/extension-telemetry';
+import { TelemetryReporter } from '@vscode/extension-telemetry';
 import { Environment } from '@azure/ms-rest-azure-env';
 
 const redirectUrl = 'https://vscode.dev/redirect';
@@ -519,7 +519,7 @@ export class AzureActiveDirectoryService {
 			label = claims.email ?? claims.unique_name ?? claims.preferred_username ?? 'user@example.com';
 		}
 
-		const id = `${claims.tid}/${(claims.oid ?? (claims.altsecid ?? '' + claims.ipd ?? ''))}`;
+		const id = `${claims.tid}/${claims.oid ?? claims.altsecid ?? claims.ipd ?? ''}`;
 		return {
 			expiresIn: json.expires_in,
 			expiresAt: json.expires_in ? Date.now() + json.expires_in * 1000 : undefined,

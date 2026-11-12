@@ -9,20 +9,23 @@
   },
   "main": "./out/node/main",
   "browser": "./dist/browser/main",
+  "resolutions": {
+    "vscode-languageserver-types": "3.17.5"
+  },
   "files": [
     "dist/**/*.js",
     "out/**/*.js"
   ],
   "dependencies": {
-    "@vscode/l10n": "^0.0.11",
-    "vscode-languageserver": "^8.1.0",
-    "vscode-languageserver-textdocument": "^1.0.8",
-    "vscode-languageserver-types": "^3.17.3",
-    "vscode-markdown-languageservice": "^0.4.0-alpha.5",
-    "vscode-uri": "^3.0.7"
+    "@vscode/l10n": "^0.0.18",
+    "vscode-languageserver": "9.0.1",
+    "vscode-languageserver-textdocument": "^1.0.16",
+    "vscode-languageserver-types": "3.17.5",
+    "vscode-markdown-languageservice": "0.4.0",
+    "vscode-uri": "^3.2.0"
   },
   "devDependencies": {
-    "@types/node": "20.x"
+    "@types/node": "26.6.6"
   },
   "scripts": {
     "compile": "gulp compile-extension:markdown-language-features-server",

@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { DisposableMap } from 'vs/base/common/lifecycle';
-import { IInlineChatBulkEditResponse, IInlineChatResponse, IInlineChatService } from 'vs/workbench/contrib/inlineChat/common/inlineChat';
+import { IInlineChatResponse, IInlineChatService } from 'vs/workbench/contrib/inlineChat/common/inlineChat';
 import { IUriIdentityService } from 'vs/platform/uriIdentity/common/uriIdentity';
 import { reviveWorkspaceEditDto } from 'vs/workbench/api/browser/mainThreadBulkEdits';
 import { ExtHostContext, ExtHostInlineChatShape, MainContext, MainThreadInlineChatShape as MainThreadInlineChatShape } from 'vs/workbench/api/common/extHost.protocol';
@@ -53,7 +53,7 @@ export class MainThreadInlineChat implements MainThreadInlineChatShape {
 				try {
 					const result = await this._proxy.$provideResponse(handle, item, request, token);
 					if (result?.type === 'bulkEdit') {
-						(<IInlineChatBulkEditResponse>result).edits = reviveWorkspaceEditDto(result.edits, this._uriIdentService);
+						return { ...result, edits: reviveWorkspaceEditDto(result.edits, this._uriIdentService) };
 					}
 					return <IInlineChatResponse | undefined>result;
 				} finally {

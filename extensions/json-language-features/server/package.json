@@ -11,17 +11,20 @@
     "vscode-json-languageserver": "./bin/vscode-json-languageserver"
   },
   "main": "./out/node/jsonServerMain",
+  "resolutions": {
+    "vscode-languageserver-types": "3.17.5"
+  },
   "dependencies": {
-    "@vscode/l10n": "^0.0.16",
-    "jsonc-parser": "^3.2.0",
-    "request-light": "^0.7.0",
-    "vscode-json-languageservice": "^5.3.6",
-    "vscode-languageserver": "^8.2.0-next.3",
-    "vscode-uri": "^3.0.7"
+    "@vscode/l10n": "^0.0.18",
+    "jsonc-parser": "^3.3.1",
+    "request-light": "^0.8.0",
+    "vscode-json-languageservice": "5.7.2",
+    "vscode-languageserver": "9.0.1",
+    "vscode-uri": "^3.2.0"
   },
   "devDependencies": {
-    "@types/mocha": "^9.1.1",
-    "@types/node": "20.x"
+    "@types/mocha": "^10.0.10",
+    "@types/node": "26.6.6"
   },
   "scripts": {
     "prepublishOnly": "npm run clean && npm run compile",

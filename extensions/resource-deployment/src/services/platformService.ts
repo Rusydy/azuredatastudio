@@ -189,7 +189,7 @@ export class PlatformService implements IPlatformService {
 				if (error) {
 					reject(error);
 				} else {
-					resolve({ stdout, stderr });
+						resolve({ stdout: String(stdout ?? ''), stderr: String(stderr ?? '') });
 				}
 			});
 		});

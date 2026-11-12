@@ -274,7 +274,8 @@ export class DeployPlanPage extends DacFxConfigPage {
 				}
 			}
 		}, { xmlMode: true, decodeEntities: true });
-		p.parseChunk(report);
+		p.write(report);
+		p.end();
 
 		let data = new Array<Array<string>>();
 		operations.forEach(operation => {

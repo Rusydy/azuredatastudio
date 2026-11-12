@@ -11,19 +11,19 @@
     "mocha": "node ../node_modules/mocha/bin/mocha"
   },
   "dependencies": {
-    "@vscode/test-electron": "^2.3.2",
-    "mkdirp": "^1.0.4",
+    "@vscode/test-electron": "^3.1.0",
+    "mkdirp": "^3.0.1",
     "ncp": "^2.0.0",
-    "node-fetch": "^2.6.7",
-    "rimraf": "3.0.2"
+    "node-fetch": "^3.3.2",
+    "rimraf": "6.1.4"
   },
   "devDependencies": {
-    "@types/mkdirp": "^1.0.1",
-    "@types/mocha": "^9.1.1",
-    "@types/ncp": "2.0.1",
-    "@types/node": "20.x",
-    "@types/node-fetch": "^2.5.10",
-    "@types/rimraf": "3.0.2",
+    "@types/mkdirp": "^2.0.0",
+    "@types/mocha": "^10.0.10",
+    "@types/ncp": "2.0.8",
+    "@types/node": "26.6.6",
+    "@types/node-fetch": "^2.6.13",
+    "@types/rimraf": "4.0.5",
     "npm-run-all": "^4.1.5",
     "watch": "^1.0.2"
   }

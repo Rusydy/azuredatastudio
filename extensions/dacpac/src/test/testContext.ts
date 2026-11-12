@@ -200,8 +200,8 @@ export function createViewContext(): ViewTestContext {
 		data: [] as any[][],
 		columns: [] as string[],
 		onRowSelected: onClick.event,
-		appendData: (_data: any[][]) => undefined,
-		setActiveCell: (_row: number, _column: number) => undefined
+		appendData: async (_data: any[][]): Promise<void> => undefined,
+		setActiveCell: (_row: number, _column: number): void => undefined
 	});
 
 	let loadingComponent: () => azdata.LoadingComponent = () => Object.assign({}, componentBase, {

@@ -12,7 +12,6 @@ import * as constants from '../common/constants';
 import { ApiWrapper } from '../common/apiWrapper';
 import { ProcessService } from '../common/processService';
 import { Config } from '../configurations/config';
-import { isNullOrUndefined } from 'util';
 import { SqlRPackageManageProvider } from './sqlRPackageManageProvider';
 import { HttpClient } from '../common/httpClient';
 import { PackageConfigModel } from '../configurations/packageConfigModel';
@@ -178,7 +177,7 @@ export class PackageManager {
 		let installedPackages = await this.getInstalledPipPackages();
 		let fileContent = '';
 		requiredPackages.forEach(packageDetails => {
-			let hasVersion = ('version' in packageDetails) && !isNullOrUndefined(packageDetails['version']) && packageDetails['version'].length > 0;
+			let hasVersion = typeof packageDetails.version === 'string' && packageDetails.version.length > 0;
 			if (!installedPackages.find(x => x.name === packageDetails['name']
 				&& (!hasVersion || utils.comparePackageVersions(packageDetails['version'] || '', x.version) <= 0))) {
 				let packageNameDetail = hasVersion ? `${packageDetails.name}==${packageDetails.version}` : `${packageDetails.name}`;

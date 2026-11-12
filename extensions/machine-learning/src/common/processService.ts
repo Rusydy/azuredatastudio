@@ -77,8 +77,8 @@ export class ProcessService {
 
 			// Add listeners to print stdout and stderr if an output channel was provided
 			if (outputChannel) {
-				child.stdout.on('data', data => { this.outputDataChunk(data, outputChannel, '    stdout: '); });
-				child.stderr.on('data', data => { this.outputDataChunk(data, outputChannel, '    stderr: '); });
+				child.stdout?.on('data', data => { this.outputDataChunk(data, outputChannel, '    stdout: '); });
+				child.stderr?.on('data', data => { this.outputDataChunk(data, outputChannel, '    stderr: '); });
 			}
 		});
 	}

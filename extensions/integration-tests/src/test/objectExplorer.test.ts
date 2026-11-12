@@ -72,7 +72,7 @@ async function verifyOeNode(server: TestServerProfile, timeout: number, expected
 	try {
 		children = await asyncTimeout(nodes[index].getChildren(), timeout);
 	} catch (e) {
-		return assert.fail('getChildren() timed out...', e);
+		return assert.fail(`getChildren() timed out... ${e}`);
 	}
 
 	const nonHDFSChildren = children.filter(c => c.label !== 'HDFS');

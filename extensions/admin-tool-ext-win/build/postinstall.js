@@ -4,10 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 
 (async () => {
+	if (process.platform !== 'win32') return;
+
 	const serviceDownloader = require('@microsoft/ads-service-downloader').ServiceDownloadProvider;
 	const path = require('path');
 	const fs = require('fs').promises;
-	const rimraf = require('rimraf');
 	const assert = require('assert');
 	const readline = require('readline');
 
@@ -24,7 +25,7 @@
 			process.stdout.write(`${event}${values && values.length > 0 ? ` - ${values.join(' ')}` : ''}`);
 		});
 		let serviceInstallFolder = installer.getInstallDirectory(runtime);
-		await new Promise((rs, rj) => rimraf(serviceInstallFolder, (e) => e ? rj(e) : rs()));
+		await fs.rm(serviceInstallFolder, { recursive: true, force: true });
 		await installer.installService(runtime);
 		let stat;
 		for (const file of config.executableFiles) {

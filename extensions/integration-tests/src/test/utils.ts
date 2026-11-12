@@ -8,7 +8,7 @@ import * as azdata from 'azdata';
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import { TestServerProfile, TestConnectionInfo } from './testConfig';
-import { isNullOrUndefined, promisify } from 'util';
+import { promisify } from 'util';
 
 // default server connection timeout
 export const DefaultConnectTimeoutInMs: number = 10000;
@@ -101,8 +101,8 @@ export async function ensureConnectionViewOpened() {
 	await vscode.commands.executeCommand('dataExplorer.servers.focus');
 }
 
-export async function sleep(ms: number): Promise<{}> {
-	return new Promise(resolve => setTimeout(resolve, ms));
+export async function sleep(ms: number): Promise<void> {
+	return new Promise(resolve => setTimeout(() => resolve(), ms));
 }
 
 export async function createDB(dbName: string, ownerUri: string): Promise<void> {
@@ -162,7 +162,7 @@ async function ensureServerConnected(server: TestServerProfile, ownerUri: string
 		// The queries might fail if connection is removed
 		// Check if connection is present - if not create new connection and use OwnerUri from there
 		let connection = await azdata.connection.getConnection(ownerUri);
-		if (isNullOrUndefined(connection)) {
+		if (connection == null) {
 			let connectionId = await connectToServer(server);
 			return azdata.connection.getUriForConnection(connectionId);
 		}

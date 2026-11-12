@@ -589,7 +589,7 @@ export abstract class AzureAuth implements vscode.Disposable {
 	protected getTokenClaims(accessToken: string): TokenClaims {
 		try {
 			const split = accessToken.split('.');
-			return JSON.parse(Buffer.from(split[1], 'base64').toString('UTF8'));
+				return JSON.parse(Buffer.from(split[1], 'base64').toString('utf8'));
 		} catch (ex) {
 			throw new Error('Unable to read token claims: ' + JSON.stringify(ex));
 		}

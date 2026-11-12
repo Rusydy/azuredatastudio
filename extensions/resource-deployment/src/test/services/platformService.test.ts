@@ -217,9 +217,9 @@ describe('PlatformService', () => {
 				const stub = sinon.stub(sudo, 'exec').callsFake((cmd, _options, cb) => {
 					// behaves like echo, returning the _cmd back as stdout/stderr/error.
 					if (commandSucceeds) {
-						cb(''/* error */, cmd/* stdout */, ''/* stderr */);
+						cb?.(undefined/* error */, cmd/* stdout */, ''/* stderr */);
 					} else {
-						cb(cmd/* error */, ''/* stdout */, cmd/* stderr */);
+						cb?.(new Error(cmd)/* error */, ''/* stdout */, cmd/* stderr */);
 					}
 				});
 				const { error, result } = await tryExecuteAction(() => platformService.runCommand(command, { commandTitle: 'title', ignoreError: ignoreError, sudo: true, workingDirectory: __dirname }));

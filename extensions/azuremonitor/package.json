@@ -16,12 +16,12 @@
     "type": "git",
     "url": "https://github.com/Microsoft/azuredatastudio.git"
   },
-	"capabilities": {
+  "capabilities": {
     "virtualWorkspaces": false,
     "untrustedWorkspaces": {
       "supported": true
     }
-	},
+  },
   "typings": "./src/azuremonitor",
   "contributes": {
     "connectionProvider": {
@@ -209,13 +209,13 @@
     "update-grammar": "node ../../build/npm/update-grammar.js Microsoft/vscode-azuremonitor ./syntaxes/azuremonitor.tmLanguage"
   },
   "dependencies": {
+    "@microsoft/ads-extension-telemetry": "^3.0.2",
+    "@microsoft/ads-service-downloader": "^1.2.2",
     "dataprotocol-client": "github:Microsoft/sqlops-dataprotocolclient#2.0.1",
-    "figures": "^2.0.0",
-    "find-remove": "1.2.1",
-    "@microsoft/ads-service-downloader": "^1.2.1",
-    "@microsoft/ads-extension-telemetry": "^3.0.1",
+    "figures": "^6.1.0",
+    "find-remove": "5.1.1",
     "vscode-languageclient": "5.2.1",
-    "vscode-nls": "^4.0.0"
+    "vscode-nls": "^5.2.0"
   },
   "devDependencies": {},
   "__metadata": {

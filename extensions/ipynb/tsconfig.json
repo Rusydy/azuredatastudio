@@ -2,6 +2,7 @@
 	"extends": "../tsconfig.base.json",
 	"compilerOptions": {
 		"outDir": "./out",
+		"allowSyntheticDefaultImports": true,
 		"lib": ["dom"]
 	},
 	"include": [

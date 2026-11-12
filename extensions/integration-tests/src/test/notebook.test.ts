@@ -14,11 +14,15 @@ import { connectToServer, sleep, testServerProfileToIConnectionProfile } from '.
 import * as fs from 'fs';
 import { promisify } from 'util';
 
+function check(value: unknown, message: string): void {
+	assert(value, message);
+}
+
 suite('Notebook integration test suite', function () {
 	setup(async function () {
 		console.log(`Start "${this.currentTest.title}"`);
 		let server = await getStandaloneServer();
-		assert(server && server.serverName, 'No server could be found');
+		check(server && server.serverName, 'No server could be found');
 		await connectToServer(server, 6000);
 	});
 
@@ -48,14 +52,14 @@ suite('Notebook integration test suite', function () {
 		if (cellOutputs) {
 			cellOutputs.forEach(o => console.log(o));
 		}
-		assert(cellOutputs.length === 3, `Expected length: 3, Actual: ${cellOutputs.length}`);
+		check(cellOutputs.length === 3, `Expected length: 3, Actual: ${cellOutputs.length}`);
 		let actualOutput0 = (<azdata.nb.IDisplayData>cellOutputs[0]).data['text/html'];
 		console.log('Got first output');
-		assert(actualOutput0 === expectedOutput0, `Expected row count: ${expectedOutput0}, Actual: ${actualOutput0}`);
+		check(actualOutput0 === expectedOutput0, `Expected row count: ${expectedOutput0}, Actual: ${actualOutput0}`);
 		let dataResource = (<azdata.nb.IExecuteResult>cellOutputs[2]).data['application/vnd.dataresource+json'];
 		let actualOutput2 = dataResource.data[0];
 		let columnName = dataResource.schema.fields[0].name;
-		assert(actualOutput2[columnName] === '1', `Expected result: 1, Actual: '${actualOutput2[columnName]}'`);
+		check(actualOutput2[columnName] === '1', `Expected result: 1, Actual: '${actualOutput2[columnName]}'`);
 	});
 
 	test('Sql NB multiple cells test', async function () {
@@ -74,17 +78,17 @@ suite('Notebook integration test suite', function () {
 		let notebook = await openNotebook(sqlNotebookMultipleCellsContent, sqlKernelMetadata, this.test.title);
 		// When running all cells above a cell, ensure that only cells preceding current cell have output
 		await runCells(notebook, true, undefined, notebook.document.cells[1]);
-		assert(notebook.document.cells[0].contents.outputs.length === 3, `Expected length: '3', Actual: '${notebook.document.cells[0].contents.outputs.length}'`);
-		assert(notebook.document.cells[1].contents.outputs.length === 0, `Expected length: '0', Actual: '${notebook.document.cells[1].contents.outputs.length}'`);
-		assert(notebook.document.cells[2].contents.outputs.length === 0, `Expected length: '0', Actual: '${notebook.document.cells[2].contents.outputs.length}'`);
+		check(notebook.document.cells[0].contents.outputs.length === 3, `Expected length: '3', Actual: '${notebook.document.cells[0].contents.outputs.length}'`);
+		check(notebook.document.cells[1].contents.outputs.length === 0, `Expected length: '0', Actual: '${notebook.document.cells[1].contents.outputs.length}'`);
+		check(notebook.document.cells[2].contents.outputs.length === 0, `Expected length: '0', Actual: '${notebook.document.cells[2].contents.outputs.length}'`);
 
 		await notebook.clearAllOutputs();
 
 		// When running all cells below a cell, ensure that current cell and cells after have output
 		await runCells(notebook, undefined, true, notebook.document.cells[1]);
-		assert(notebook.document.cells[0].contents.outputs.length === 0, `Expected length: '0', Actual: '${notebook.document.cells[0].contents.outputs.length}'`);
-		assert(notebook.document.cells[1].contents.outputs.length === 3, `Expected length: '3', Actual: '${notebook.document.cells[1].contents.outputs.length}'`);
-		assert(notebook.document.cells[2].contents.outputs.length === 3, `Expected length: '3', Actual: '${notebook.document.cells[2].contents.outputs.length}'`);
+		check(notebook.document.cells[0].contents.outputs.length === 0, `Expected length: '0', Actual: '${notebook.document.cells[0].contents.outputs.length}'`);
+		check(notebook.document.cells[1].contents.outputs.length === 3, `Expected length: '3', Actual: '${notebook.document.cells[1].contents.outputs.length}'`);
+		check(notebook.document.cells[2].contents.outputs.length === 3, `Expected length: '3', Actual: '${notebook.document.cells[2].contents.outputs.length}'`);
 	});
 
 	test('Clear cell output - SQL notebook', async function () {
@@ -118,18 +122,18 @@ suite('Notebook integration test suite', function () {
 		// Given a notebook that's been edited (in this case, open notebook runs the 1st cell and adds an output)
 		let notebook = await openNotebook(sqlNotebookContent, sqlKernelMetadata, this.test.title);
 		await runCell(notebook);
-		assert(notebook.document.providerId === 'sql', `Expected providerId to be sql, Actual: ${notebook.document.providerId}`);
-		assert(notebook.document.kernelSpec.name === 'SQL', `Expected first kernel name: SQL, Actual: ${notebook.document.kernelSpec.name}`);
-		assert(notebook.document.isDirty === true, 'Notebook should be dirty after edit');
+		check(notebook.document.providerId === 'sql', `Expected providerId to be sql, Actual: ${notebook.document.providerId}`);
+		check(notebook.document.kernelSpec.name === 'SQL', `Expected first kernel name: SQL, Actual: ${notebook.document.kernelSpec.name}`);
+		check(notebook.document.isDirty === true, 'Notebook should be dirty after edit');
 
 		// When I save it, it should no longer be dirty
 		let saved = await notebook.document.save();
-		assert(saved === true, 'Expect initial save to succeed');
+		check(saved === true, 'Expect initial save to succeed');
 		// Note: need to sleep after save as the change events happen after save
 		// We need to give back the thread or the event won't have been drained.
 		// This is consistent with VSCode APIs, so keeping as-is
 		await sleep(100);
-		assert(notebook.document.isDirty === false, 'Notebook should not be dirty after initial save');
+		check(notebook.document.isDirty === false, 'Notebook should not be dirty after initial save');
 
 		// And when I edit again, should become dirty
 		let edited = await notebook.edit(builder => {
@@ -138,15 +142,15 @@ suite('Notebook integration test suite', function () {
 				source: ''
 			});
 		});
-		assert(edited === true, 'Expect edit to succeed');
+		check(edited === true, 'Expect edit to succeed');
 		await sleep(100);
-		assert(notebook.document.isDirty === true, 'Notebook should be dirty after edit');
+		check(notebook.document.isDirty === true, 'Notebook should be dirty after edit');
 
 		// Finally on 2nd save it should no longer be dirty
 		saved = await notebook.document.save();
 		await sleep(100);
-		assert(saved === true, 'Expect save after edit to succeed');
-		assert(notebook.document.isDirty === false, 'Notebook should not be dirty after 2nd save');
+		check(saved === true, 'Expect save after edit to succeed');
+		check(notebook.document.isDirty === false, 'Notebook should not be dirty after 2nd save');
 	});
 
 	if (process.env['RUN_PYTHON3_TEST'] === '1') {
@@ -159,7 +163,7 @@ suite('Notebook integration test suite', function () {
 				cellOutputs.forEach(o => console.log(JSON.stringify(o, undefined, '\t')));
 			}
 			let result = (<azdata.nb.IExecuteResult>cellOutputs[0]).data['text/plain'];
-			assert(result === '2', `Expected python result: 2, Actual: ${result}`);
+			check(result === '2', `Expected python result: 2, Actual: ${result}`);
 		});
 
 		test('Clear all outputs - Python3 notebook ', async function () {
@@ -186,46 +190,46 @@ suite('Notebook integration test suite', function () {
 		test('Change kernel different provider SQL to Python to SQL', async function () {
 			let notebook = await openNotebook(sqlNotebookContent, sqlKernelMetadata, this.test.title);
 			await runCell(notebook);
-			assert(notebook.document.providerId === 'sql', `Expected providerId to be sql, Actual: ${notebook.document.providerId}`);
-			assert(notebook.document.kernelSpec.name === 'SQL', `Expected first kernel name: SQL, Actual: ${notebook.document.kernelSpec.name}`);
+			check(notebook.document.providerId === 'sql', `Expected providerId to be sql, Actual: ${notebook.document.providerId}`);
+			check(notebook.document.kernelSpec.name === 'SQL', `Expected first kernel name: SQL, Actual: ${notebook.document.kernelSpec.name}`);
 
 			let kernelChanged = await notebook.changeKernel(pythonKernelSpec);
-			assert(notebook.document.providerId === 'jupyter', `Expected providerId to be jupyter, Actual: ${notebook.document.providerId}`);
-			assert(kernelChanged && notebook.document.kernelSpec.name === 'python3', `Expected second kernel name: python3, Actual: ${notebook.document.kernelSpec.name}`);
+			check(notebook.document.providerId === 'jupyter', `Expected providerId to be jupyter, Actual: ${notebook.document.providerId}`);
+			check(kernelChanged && notebook.document.kernelSpec.name === 'python3', `Expected second kernel name: python3, Actual: ${notebook.document.kernelSpec.name}`);
 
 			kernelChanged = await notebook.changeKernel(sqlKernelSpec);
-			assert(notebook.document.providerId === 'sql', `Expected providerId to be sql, Actual: ${notebook.document.providerId}`);
-			assert(kernelChanged && notebook.document.kernelSpec.name === 'SQL', `Expected third kernel name: SQL, Actual: ${notebook.document.kernelSpec.name}`);
+			check(notebook.document.providerId === 'sql', `Expected providerId to be sql, Actual: ${notebook.document.providerId}`);
+			check(kernelChanged && notebook.document.kernelSpec.name === 'SQL', `Expected third kernel name: SQL, Actual: ${notebook.document.kernelSpec.name}`);
 		});
 
 		test('Change kernel different provider Python to SQL to Python', async function () {
 			let notebook = await openNotebook(pythonNotebookContent, pythonKernelMetadata, this.test.title);
 			await runCell(notebook);
-			assert(notebook.document.providerId === 'jupyter', `Expected providerId to be jupyter, Actual: ${notebook.document.providerId}`);
-			assert(notebook.document.kernelSpec.name === 'python3', `Expected first kernel name: python3, Actual: ${notebook.document.kernelSpec.name}`);
+			check(notebook.document.providerId === 'jupyter', `Expected providerId to be jupyter, Actual: ${notebook.document.providerId}`);
+			check(notebook.document.kernelSpec.name === 'python3', `Expected first kernel name: python3, Actual: ${notebook.document.kernelSpec.name}`);
 
 			let kernelChanged = await notebook.changeKernel(sqlKernelSpec);
-			assert(notebook.document.providerId === 'sql', `Expected providerId to be sql, Actual: ${notebook.document.providerId}`);
-			assert(kernelChanged && notebook.document.kernelSpec.name === 'SQL', `Expected second kernel name: SQL, Actual: ${notebook.document.kernelSpec.name}`);
+			check(notebook.document.providerId === 'sql', `Expected providerId to be sql, Actual: ${notebook.document.providerId}`);
+			check(kernelChanged && notebook.document.kernelSpec.name === 'SQL', `Expected second kernel name: SQL, Actual: ${notebook.document.kernelSpec.name}`);
 
 			kernelChanged = await notebook.changeKernel(pythonKernelSpec);
-			assert(notebook.document.providerId === 'jupyter', `Expected providerId to be jupyter, Actual: ${notebook.document.providerId}`);
-			assert(kernelChanged && notebook.document.kernelSpec.name === 'python3', `Expected third kernel name: python3, Actual: ${notebook.document.kernelSpec.name}`);
+			check(notebook.document.providerId === 'jupyter', `Expected providerId to be jupyter, Actual: ${notebook.document.providerId}`);
+			check(kernelChanged && notebook.document.kernelSpec.name === 'python3', `Expected third kernel name: python3, Actual: ${notebook.document.kernelSpec.name}`);
 		});
 
 		test('Change kernel same provider Python to Powershell to Python', async function () {
 			let notebook = await openNotebook(pythonNotebookContent, pythonKernelMetadata, this.test.title);
 			await runCell(notebook);
-			assert(notebook.document.providerId === 'jupyter', `Expected providerId to be jupyter, Actual: ${notebook.document.providerId}`);
-			assert(notebook.document.kernelSpec.name === 'python3', `Expected first kernel name: python3, Actual: ${notebook.document.kernelSpec.name}`);
+			check(notebook.document.providerId === 'jupyter', `Expected providerId to be jupyter, Actual: ${notebook.document.providerId}`);
+			check(notebook.document.kernelSpec.name === 'python3', `Expected first kernel name: python3, Actual: ${notebook.document.kernelSpec.name}`);
 
 			let kernelChanged = await notebook.changeKernel(powershellKernelSpec);
-			assert(notebook.document.providerId === 'jupyter', `Expected providerId to be jupyter, Actual: ${notebook.document.providerId}`);
-			assert(kernelChanged && notebook.document.kernelSpec.name === 'powershell', `Expected second kernel name: powershell, Actual: ${notebook.document.kernelSpec.name}`);
+			check(notebook.document.providerId === 'jupyter', `Expected providerId to be jupyter, Actual: ${notebook.document.providerId}`);
+			check(kernelChanged && notebook.document.kernelSpec.name === 'powershell', `Expected second kernel name: powershell, Actual: ${notebook.document.kernelSpec.name}`);
 
 			kernelChanged = await notebook.changeKernel(pythonKernelSpec);
-			assert(notebook.document.providerId === 'jupyter', `Expected providerId to be jupyter, Actual: ${notebook.document.providerId}`);
-			assert(kernelChanged && notebook.document.kernelSpec.name === 'python3', `Expected third kernel name: python3, Actual: ${notebook.document.kernelSpec.name}`);
+			check(notebook.document.providerId === 'jupyter', `Expected providerId to be jupyter, Actual: ${notebook.document.providerId}`);
+			check(kernelChanged && notebook.document.kernelSpec.name === 'python3', `Expected third kernel name: python3, Actual: ${notebook.document.kernelSpec.name}`);
 		});
 	}
 
@@ -274,20 +278,20 @@ async function multipleCellsTest(relativeFilePath: string): Promise<void> {
 			cellOutputs.forEach(console.log);
 		}
 
-		assert(cellOutputs.length === 3, `Expected length: 3, Actual: '${cellOutputs.length}'`);
+		check(cellOutputs.length === 3, `Expected length: 3, Actual: '${cellOutputs.length}'`);
 		let actualOutput0 = (<azdata.nb.IDisplayData>cellOutputs[0]).data['text/html'];
 		console.log('Got first output');
-		assert(actualOutput0 === expectedOutput0, `Expected row count: '${expectedOutput0}', Actual: '${actualOutput0}'`);
+		check(actualOutput0 === expectedOutput0, `Expected row count: '${expectedOutput0}', Actual: '${actualOutput0}'`);
 
 		const executeResult = cellOutputs[2] as azdata.nb.IExecuteResult;
-		assert(Object.keys(executeResult).includes('data'), `Execute result did not include data key. It included ${Object.keys(executeResult)}`);
+		check(Object.keys(executeResult).includes('data'), `Execute result did not include data key. It included ${Object.keys(executeResult)}`);
 		const applicationDataResource = executeResult.data['application/vnd.dataresource+json'];
 
-		assert(Object.keys(applicationDataResource).includes('data'), `Execute result did not include data key. It included ${Object.keys(applicationDataResource)}`);
+		check(Object.keys(applicationDataResource).includes('data'), `Execute result did not include data key. It included ${Object.keys(applicationDataResource)}`);
 		const actualOutput2 = applicationDataResource.data[0];
 		const columnName = applicationDataResource.schema.fields[0].name;
 
-		assert(actualOutput2[columnName] === i.toString(), `Expected result: ${i.toString()}, Actual: '${actualOutput2[columnName]}'`);
+		check(actualOutput2[columnName] === i.toString(), `Expected result: ${i.toString()}, Actual: '${actualOutput2[columnName]}'`);
 		console.log('Sql multiple cells NB done');
 	}
 }
@@ -298,7 +302,7 @@ async function openNotebook(content: azdata.nb.INotebookContents, kernelMetadata
 	let server: TestServerProfile;
 	if (!connectToDifferentServer) {
 		server = await getStandaloneServer();
-		assert(server && server.serverName, 'No server could be found in openNotebook');
+		check(server && server.serverName, 'No server could be found in openNotebook');
 		await connectToServer(server, 6000);
 	}
 	let notebookJson = Object.assign({}, content, { metadata: kernelMetadata });
@@ -313,7 +317,7 @@ async function openNotebook(content: azdata.nb.INotebookContents, kernelMetadata
 }
 
 async function runCells(notebook: azdata.nb.NotebookEditor, runCellsAbove?: boolean, runCellsBelow?: boolean, currentCell?: azdata.nb.NotebookCell) {
-	assert(notebook !== undefined && notebook !== null, 'Expected notebook object is defined');
+	check(notebook !== undefined && notebook !== null, 'Expected notebook object is defined');
 	let ran;
 	if (runCellsAbove) {
 		ran = await notebook.runAllCells(undefined, currentCell);
@@ -322,7 +326,7 @@ async function runCells(notebook: azdata.nb.NotebookEditor, runCellsAbove?: bool
 	} else {
 		ran = await notebook.runAllCells();
 	}
-	assert(ran, 'Notebook runCell should succeed');
+	check(ran, 'Notebook runCell should succeed');
 }
 
 async function runCell(notebook: azdata.nb.NotebookEditor, cell?: azdata.nb.NotebookCell) {
@@ -330,29 +334,29 @@ async function runCell(notebook: azdata.nb.NotebookEditor, cell?: azdata.nb.Note
 		cell = notebook.document.cells[0];
 	}
 	let ran = await notebook.runCell(cell);
-	assert(ran, 'Notebook runCell should succeed');
+	check(ran, 'Notebook runCell should succeed');
 }
 
 async function verifyClearAllOutputs(notebook: azdata.nb.NotebookEditor): Promise<void> {
 	let cellWithOutputs = notebook.document.cells.find(cell => cell.contents && cell.contents.outputs && cell.contents.outputs.length > 0);
-	assert(cellWithOutputs !== undefined, 'Could not find notebook cells with outputs');
+	check(cellWithOutputs !== undefined, 'Could not find notebook cells with outputs');
 	console.log('Before clearing cell outputs');
 	let clearedOutputs = await notebook.clearAllOutputs();
 	let cells = notebook.document.cells;
 	cells.forEach(cell => {
-		assert(cell.contents && cell.contents.outputs && cell.contents.outputs.length === 0, `Expected Output: 0, Actual: '${cell.contents.outputs.length}'`);
+		check(cell.contents && cell.contents.outputs && cell.contents.outputs.length === 0, `Expected Output: 0, Actual: '${cell.contents.outputs.length}'`);
 	});
-	assert(clearedOutputs, 'Outputs of all the code cells from Python notebook should be cleared');
+	check(clearedOutputs, 'Outputs of all the code cells from Python notebook should be cleared');
 	console.log('After clearing cell outputs');
 }
 
 async function verifyClearOutputs(notebook: azdata.nb.NotebookEditor): Promise<void> {
 	let cellWithOutputs = notebook.document.cells[0].contents && notebook.document.cells[0].contents.outputs && notebook.document.cells[0].contents.outputs.length > 0;
-	assert(cellWithOutputs === true, 'Expected first cell to have outputs');
+	check(cellWithOutputs === true, 'Expected first cell to have outputs');
 	let clearedOutputs = await notebook.clearOutput(notebook.document.cells[0]);
 	let firstCell = notebook.document.cells[0];
-	assert(firstCell.contents && firstCell.contents.outputs && firstCell.contents.outputs.length === 0, `Expected Output: 0, Actual: '${firstCell.contents.outputs.length}'`);
-	assert(clearedOutputs, 'Outputs of requested code cell should be cleared');
+	check(firstCell.contents && firstCell.contents.outputs && firstCell.contents.outputs.length === 0, `Expected Output: 0, Actual: '${firstCell.contents.outputs.length}'`);
+	check(clearedOutputs, 'Outputs of requested code cell should be cleared');
 }
 
 async function cellLanguageTest(content: azdata.nb.INotebookContents, relativeFilePath: string, languageConfigured: string, metadataInfo: azdata.nb.INotebookMetadata) {
@@ -361,5 +365,5 @@ async function cellLanguageTest(content: azdata.nb.INotebookContents, relativeFi
 	let notebook = await azdata.nb.showNotebookDocument(uri);
 	await notebook.document.save();
 	let languageInNotebook = notebook.document.cells[0].contents.metadata.language;
-	assert(languageInNotebook === languageConfigured, `Expected cell language is: ${languageConfigured}, Actual: ${languageInNotebook}`);
+	check(languageInNotebook === languageConfigured, `Expected cell language is: ${languageConfigured}, Actual: ${languageInNotebook}`);
 }

@@ -135,7 +135,7 @@ export class SqlNotebookController implements vscode.Disposable {
 		let docUri = vscode.window.activeTextEditor?.document.uri;
 		if (docUri && docUri.scheme === this._cellUriScheme && docUri.path === notebookUri.path) {
 			if (this._activeCellUri) {
-				this._connProvider.disconnect(this._activeCellUri).then(() => undefined, error => console.log(error));
+				this._connProvider.disconnect(this._activeCellUri).then((): void => undefined, error => console.log(error));
 			}
 			this._activeCellUri = docUri.toString();
 			// Delay connecting in case user is clicking between cells a lot

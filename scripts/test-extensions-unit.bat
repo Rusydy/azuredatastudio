@@ -31,7 +31,6 @@ if "%INTEGRATION_TEST_ELECTRON_PATH%"=="" (
 					compile-extension:azurecore^
 					compile-extension:cms^
 					compile-extension:dacpac^
-					compile-extension:datavirtualization^
 					compile-extension:import^
 					compile-extension:schema-compare^
 					compile-extension:machine-learning^
@@ -88,10 +87,6 @@ echo *****************************
 call "%INTEGRATION_TEST_ELECTRON_PATH%" --extensionDevelopmentPath=%~dp0\..\extensions\dacpac --extensionTestsPath=%~dp0\..\extensions\dacpac\out\test %ALL_PLATFORMS_API_TESTS_EXTRA_ARGS%
 
 echo *****************************************
-echo *** starting datavirtualization tests ***
-echo *****************************************
-call "%INTEGRATION_TEST_ELECTRON_PATH%" --extensionDevelopmentPath=%~dp0\..\extensions\datavirtualization --extensionTestsPath=%~dp0\..\extensions\datavirtualization\out\test %ALL_PLATFORMS_API_TESTS_EXTRA_ARGS%
-
 REM {{SQL CARBON TODO}} - follow-up on why this extension test suite is failing
 REM echo ********************************************
 REM echo *** starting data-workspace tests ***

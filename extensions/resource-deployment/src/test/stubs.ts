@@ -7,7 +7,7 @@ import * as events from 'events';
 import * as cp from 'promisify-child-process';
 import { Readable } from 'stream';
 
-export class TestChildProcessPromise<T> implements cp.ChildProcessPromise {
+export class TestChildProcessPromise<T extends cp.Output> implements cp.ChildProcessPromise {
 	private _promise: Promise<T>;
 	private _event: events.EventEmitter = new events.EventEmitter();
 	readonly exitCode: number | null = null;
@@ -94,10 +94,10 @@ export class TestChildProcessPromise<T> implements cp.ChildProcessPromise {
 	getMaxListeners(): number {
 		throw new Error('Method not implemented.');
 	}
-	listeners(event: string | symbol): Function[] {
+	listeners(event: string | symbol): Array<(...args: any[]) => void> {
 		throw new Error('Method not implemented.');
 	}
-	rawListeners(event: string | symbol): Function[] {
+	rawListeners(event: string | symbol): Array<(...args: any[]) => void> {
 		throw new Error('Method not implemented.');
 	}
 	emit(event: string | symbol, ...args: any[]): boolean {

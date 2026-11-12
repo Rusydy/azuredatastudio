@@ -3,6 +3,6 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-export async function sleep(ms: number): Promise<{}> {
-	return new Promise(resolve => setTimeout(resolve, ms));
+export async function sleep(ms: number): Promise<void> {
+	return new Promise(resolve => setTimeout(() => resolve(), ms));
 }

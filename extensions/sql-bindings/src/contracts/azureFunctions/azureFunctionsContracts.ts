@@ -10,14 +10,14 @@ import { RequestType } from 'vscode-languageclient';
  * Adds a SQL Binding to a specified Azure function in a file
  */
 export namespace AddSqlBindingRequest {
-	export const type = new RequestType<AddSqlBindingParams, ResultStatus, void, void>('azureFunctions/sqlBinding');
+	export const type = new RequestType<AddSqlBindingParams, ResultStatus, void>('azureFunctions/sqlBinding');
 }
 
 /**
  * Gets the names of the Azure functions in a file
  */
 export namespace GetAzureFunctionsRequest {
-	export const type = new RequestType<GetAzureFunctionsParams, GetAzureFunctionsResult, void, void>('azureFunctions/getAzureFunctions');
+	export const type = new RequestType<GetAzureFunctionsParams, GetAzureFunctionsResult, void>('azureFunctions/getAzureFunctions');
 }
 
 // ------------------------------- < Execute String > ------------------------------------
@@ -43,7 +43,7 @@ export interface SimpleExecuteResult {
 
 // source: https://github.com/microsoft/sqlops-dataprotocolclient/blob/main/src/protocol.ts#L437
 export namespace SimpleExecuteRequest {
-	export const type = new RequestType<SimpleExecuteParams, SimpleExecuteResult, void, void>('query/simpleexecute');
+	export const type = new RequestType<SimpleExecuteParams, SimpleExecuteResult, void>('query/simpleexecute');
 }
 
 // source: https://github.com/microsoft/azuredatastudio/blob/main/src/sql/azdata.d.ts#L907

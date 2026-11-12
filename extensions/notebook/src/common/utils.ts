@@ -40,7 +40,7 @@ export function executeBufferedCommand(cmd: string, options: childProcess.ExecOp
 			if (err) {
 				reject(err);
 			} else {
-				resolve(stdout);
+				resolve(stdout.toString());
 			}
 		});
 
@@ -53,7 +53,7 @@ export function executeBufferedCommand(cmd: string, options: childProcess.ExecOp
 }
 
 export function executeBufferedCommandSync(cmd: string, options: childProcess.ExecOptions): string {
-	return childProcess.execSync(cmd, options).toString();
+	return childProcess.execSync(cmd, options as childProcess.ExecSyncOptions).toString();
 }
 
 export function executeStreamedCommand(cmd: string, options: childProcess.SpawnOptions, outputChannel?: vscode.OutputChannel): Thenable<void> {

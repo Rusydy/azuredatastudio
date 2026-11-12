@@ -214,7 +214,7 @@ export function activate(context: vscode.ExtensionContext) {
 					const endEmitter = new vscode.EventEmitter<void>();
 
 					await new Promise((res, rej) => {
-						remoteSocket.on('data', d => dataEmitter.fire(d))
+						remoteSocket.on('data', d => dataEmitter.fire(typeof d === 'string' ? Buffer.from(d) : d))
 							.on('error', err => { rej(); closeEmitter.fire(err); })
 							.on('close', () => endEmitter.fire())
 							.on('end', () => endEmitter.fire())

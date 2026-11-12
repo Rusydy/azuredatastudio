@@ -23,8 +23,8 @@
     "watch": "gulp watch-extension:configuration-editing"
   },
   "dependencies": {
-    "jsonc-parser": "^2.2.1",
-    "@octokit/rest": "19.0.4",
+    "@octokit/rest": "22.0.1",
+    "jsonc-parser": "^3.3.1",
     "tunnel": "^0.0.6"
   },
   "capabilities": {
@@ -54,7 +54,8 @@
           "devcontainer.json",
           ".devcontainer.json"
         ]
-      }, {
+      },
+      {
         "id": "json",
         "extensions": [
           ".code-profile"
@@ -161,7 +162,7 @@
     ]
   },
   "devDependencies": {
-    "@types/node": "20.x"
+    "@types/node": "26.6.6"
   },
   "repository": {
     "type": "git",

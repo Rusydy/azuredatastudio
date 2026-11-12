@@ -83,10 +83,14 @@ export class AzureAccountProviderService implements vscode.Disposable {
 	}
 
 	public async getEncryptionKeys(): Promise<CacheEncryptionKeys> {
+		await this._configChangePromiseChain;
 		if (!this._cachePluginProvider) {
 			await this.onDidChangeConfiguration();
 		}
-		return this._cachePluginProvider!.getCacheEncryptionKeys();
+		if (!this._cachePluginProvider) {
+			throw new Error('Azure account cache is not initialised.');
+		}
+		return this._cachePluginProvider.getCacheEncryptionKeys();
 	}
 
 	public dispose() {

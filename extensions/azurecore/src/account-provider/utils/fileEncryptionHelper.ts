@@ -23,7 +23,7 @@ export class FileEncryptionHelper {
 
 	private _algorithm: string;
 	private _bufferEncoding: BufferEncoding;
-	private _binaryEncoding: crypto.HexBase64BinaryEncoding;
+	private _binaryEncoding: 'base64' | 'hex';
 	private _ivCredId = `${this._fileName}-iv`;
 	private _keyCredId = `${this._fileName}-key`;
 	private _ivBuffer: Buffer | undefined;

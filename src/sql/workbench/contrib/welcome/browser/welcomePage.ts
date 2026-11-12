@@ -199,7 +199,6 @@ const extensionPackExtensions: ExtensionPackExtensions[] = [
 
 const extensions: ExtensionSuggestion[] = [
 	{ name: localize('welcomePage.powershell', "Powershell"), id: 'microsoft.powershell', description: localize('welcomePage.powershellDescription', "Write and execute PowerShell scripts using Azure Data Studio's rich query editor"), icon: require.toUrl('./../media/icon_powershell.png'), link: `command:azdata.extension.open?{"id":"microsoft.powershell"}` },
-	{ name: localize('welcomePage.dataVirtualization', "Data Virtualization"), id: 'microsoft.datavirtualization', description: localize('welcomePage.dataVirtualizationDescription', "Virtualize data with SQL Server 2019 and create external tables using interactive wizards"), icon: require.toUrl('./../media/defaultExtensionIcon.svg'), link: `command:azdata.extension.open?{"id":"microsoft.datavirtualization"}` },
 	{ name: localize('welcomePage.PostgreSQL', "PostgreSQL"), id: 'microsoft.azuredatastudio-postgresql', description: localize('welcomePage.PostgreSQLDescription', "Connect, query, and manage Postgres databases with Azure Data Studio"), icon: require.toUrl('./../media/icon_postgre_sql.png'), link: `command:azdata.extension.open?{"id":"microsoft.azuredatastudio-postgresql"}` },
 ];
 

@@ -26,7 +26,7 @@ import * as languages from 'vs/editor/common/languages';
 import { CharacterPair, CommentRule, EnterAction } from 'vs/editor/common/languages/languageConfiguration';
 import { EndOfLineSequence } from 'vs/editor/common/model';
 import { IModelChangedEvent } from 'vs/editor/common/model/mirrorTextModel';
-import { IInlineChatRequest, IInlineChatResponse, IInlineChatSession, InlineChatResponseFeedbackKind } from 'vs/workbench/contrib/inlineChat/common/inlineChat';
+import { IInlineChatBulkEditResponse, IInlineChatRequest, IInlineChatResponse, IInlineChatSession, InlineChatResponseFeedbackKind } from 'vs/workbench/contrib/inlineChat/common/inlineChat';
 import { IAccessibilityInformation } from 'vs/platform/accessibility/common/accessibility';
 import { ConfigurationTarget, IConfigurationChange, IConfigurationData, IConfigurationOverrides } from 'vs/platform/configuration/common/configuration';
 import { ConfigurationScope } from 'vs/platform/configuration/common/configurationRegistry';
@@ -1198,7 +1198,7 @@ export interface MainThreadInlineChatShape extends IDisposable {
 	$unregisterInteractiveEditorProvider(handle: number): Promise<void>;
 }
 
-export type IInlineChatResponseDto = Dto<IInlineChatResponse>;
+export type IInlineChatResponseDto = Dto<Exclude<IInlineChatResponse, IInlineChatBulkEditResponse>> | (Dto<Omit<IInlineChatBulkEditResponse, 'edits'>> & { edits: IWorkspaceEditDto });
 
 export interface ExtHostInlineChatShape {
 	$prepareSession(handle: number, uri: UriComponents, range: ISelection, token: CancellationToken): Promise<IInlineChatSession | undefined>;

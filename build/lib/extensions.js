@@ -243,6 +243,8 @@ const excludedExtensions = [
     'ms-vscode.node-debug2',
     'vscode-custom-editor-tests',
     'integration-tests', // {{SQL CARBON EDIT}}
+    // TODO(Kiroku): Recreate Data Virtualisation and its service before shipping it again.
+    'datavirtualization',
 ];
 // {{SQL CARBON EDIT}}
 const externalExtensions = [
@@ -259,7 +261,6 @@ const externalExtensions = [
     'azuremonitor',
     'cms',
     'dacpac',
-    'datavirtualization',
     'import',
     'kusto',
     'machine-learning',
@@ -413,6 +414,7 @@ function packageExternalExtensionsStream() {
         const extensionName = path.basename(extensionPath);
         return { name: extensionName, path: extensionPath };
     })
+        .filter(({ name }) => excludedExtensions.indexOf(name) === -1)
         .filter(({ name }) => externalExtensions.indexOf(name) >= 0 || exports.vscodeExternalExtensions.indexOf(name) >= 0);
     const builtExtensions = extenalExtensionDescriptions.map(extension => {
         return fromLocal(extension.path, false, true)
@@ -563,9 +565,6 @@ async function esbuildExtensions(taskName, isWatch, scripts) {
                     return reject(error);
                 }
                 reporter(stderr, script);
-                if (stderr) {
-                    return reject();
-                }
                 return resolve();
             });
             proc.stdout.on('data', (data) => {

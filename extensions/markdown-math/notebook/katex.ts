@@ -2,7 +2,7 @@
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-import type * as markdownIt from 'markdown-it';
+import type MarkdownIt from 'markdown-it';
 import type { RendererContext } from 'vscode-notebook-renderer';
 
 const styleHref = import.meta.url.replace(/katex.js$/, 'katex.min.css');
@@ -41,9 +41,9 @@ export async function activate(ctx: RendererContext<void>) {
 	`;
 	document.head.append(style);
 
-	const katex = require('@vscode/markdown-it-katex');
+	const katex = (await import('@vscode/markdown-it-katex')).default;
 	const macros = {};
-	markdownItRenderer.extendMarkdownIt((md: markdownIt.MarkdownIt) => {
+	markdownItRenderer.extendMarkdownIt((md: MarkdownIt) => {
 		return md.use(katex, {
 			globalGroup: true,
 			enableBareBlocks: true,

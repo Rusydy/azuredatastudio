@@ -5,7 +5,8 @@
 
 import * as DOMPurify from 'dompurify';
 import MarkdownIt from 'markdown-it';
-import type * as MarkdownItToken from 'markdown-it/lib/token';
+import type * as Token from 'markdown-it/lib/token';
+type MarkdownItInstance = InstanceType<typeof MarkdownIt>;
 import type { ActivationFunction } from 'vscode-notebook-renderer';
 
 const allowedHtmlTags = Object.freeze(['a',
@@ -130,7 +131,7 @@ const sanitizerOptions: DOMPurify.Config = {
 };
 
 export const activate: ActivationFunction<void> = (ctx) => {
-	const markdownIt: MarkdownIt = new MarkdownIt({
+	const markdownIt: MarkdownItInstance = new MarkdownIt({
 		html: true,
 		linkify: true,
 		highlight: (str: string, lang?: string) => {
@@ -338,11 +339,11 @@ export const activate: ActivationFunction<void> = (ctx) => {
 };
 
 
-function addNamedHeaderRendering(md: InstanceType<typeof MarkdownIt>): void {
+function addNamedHeaderRendering(md: MarkdownItInstance): void {
 	const slugCounter = new Map<string, number>();
 
 	const originalHeaderOpen = md.renderer.rules.heading_open;
-	md.renderer.rules.heading_open = (tokens: MarkdownItToken[], idx: number, options, env, self) => {
+	md.renderer.rules.heading_open = (tokens: Token[], idx: number, options, env, self) => {
 		const title = tokens[idx + 1].children!.reduce<string>((acc, t) => acc + t.content, '');
 		let slug = slugify(title);
 
@@ -370,10 +371,10 @@ function addNamedHeaderRendering(md: InstanceType<typeof MarkdownIt>): void {
 	};
 }
 
-function addLinkRenderer(md: MarkdownIt): void {
+function addLinkRenderer(md: MarkdownItInstance): void {
 	const original = md.renderer.rules.link_open;
 
-	md.renderer.rules.link_open = (tokens: MarkdownItToken[], idx: number, options, env, self) => {
+	md.renderer.rules.link_open = (tokens: Token[], idx: number, options, env, self) => {
 		const token = tokens[idx];
 		const href = token.attrGet('href');
 		if (typeof href === 'string' && href.startsWith('#')) {

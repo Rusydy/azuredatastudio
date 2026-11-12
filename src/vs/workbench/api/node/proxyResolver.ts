@@ -125,7 +125,7 @@ async function lookupProxyAuthorization(
 	isRemote: boolean,
 	proxyURL: string,
 	proxyAuthenticate: string | string[] | undefined,
-	state: { kerberosRequested?: boolean }
+	state: { kerberosRequested?: boolean } = {}
 ): Promise<string | undefined> {
 	const cached = proxyAuthenticateCache[proxyURL];
 	if (proxyAuthenticate) {

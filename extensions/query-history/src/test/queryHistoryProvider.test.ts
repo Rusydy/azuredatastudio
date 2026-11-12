@@ -9,6 +9,7 @@ import * as should from 'should';
 import 'mocha';
 import * as sinon from 'sinon';
 import * as azdataTest from '@microsoft/azdata-test';
+import { tmpdir } from 'os';
 import { QueryHistoryProvider } from '../queryHistoryProvider';
 import { QueryHistoryItem } from '../queryHistoryItem';
 
@@ -28,7 +29,7 @@ describe('QueryHistoryProvider', () => {
 		textDocumentSandbox.replaceGetter(vscode.workspace, 'textDocuments', () => [azdataTest.mocks.vscode.createTextDocumentMock(testUri).object]);
 		const getConnectionStub = sinon.stub(azdata.connection, 'getConnection');
 		getConnectionStub.resolves(<any>{});
-		const contextMock = azdataTest.mocks.vscode.createExtensionContextMock();
+		const contextMock = azdataTest.mocks.vscode.createExtensionContextMock(vscode.Uri.file(tmpdir()));
 		testProvider = new QueryHistoryProvider(contextMock.object, contextMock.object.globalStorageUri);
 		// Disable persistence during tests
 		await testProvider.setPersistenceEnabled(false);

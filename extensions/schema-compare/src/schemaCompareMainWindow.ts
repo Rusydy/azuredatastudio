@@ -14,7 +14,6 @@ import { SchemaCompareOptionsDialog } from './dialogs/schemaCompareOptionsDialog
 import { TelemetryReporter, TelemetryViews } from './telemetry';
 import { getTelemetryErrorType, getEndpointName, verifyConnectionAndGetOwnerUri, getRootPath, getSchemaCompareEndpointString, getDataWorkspaceExtensionApi } from './utils';
 import { SchemaCompareDialog } from './dialogs/schemaCompareDialog';
-import { isNullOrUndefined } from 'util';
 
 // Do not localize this, this is used to decide the icon for the editor.
 // TODO : In future icon should be decided based on language id (scmp) and not resource name
@@ -201,7 +200,7 @@ export class SchemaCompareMainWindow {
 	private async registerContent(): Promise<void> {
 		return new Promise<void>((resolve) => {
 			this.editor.registerContent(async (view) => {
-				if (isNullOrUndefined(this.view)) {
+				if (this.view == null) {
 					this.view = view;
 				}
 
@@ -666,7 +665,7 @@ export class SchemaCompareMainWindow {
 	}
 
 	private createName(nameParts: string[]): string {
-		if (isNullOrUndefined(nameParts) || nameParts.length === 0) {
+		if (nameParts == null || nameParts.length === 0) {
 			return '';
 		}
 		return nameParts.join('.');

@@ -71,7 +71,6 @@
 		"Microsoft.query-history",
 		"Microsoft.schema-compare",
 		"Microsoft.sql-assessment",
-		"Microsoft.datavirtualization",
 		"Microsoft.sql-database-projects",
 		"Microsoft.sql-migration",
 		"Microsoft.machine-learning",
@@ -105,7 +104,6 @@
 			"handleIssueUri",
 			"interactive",
 			"interactiveUserActions",
-			"semanticSimilarity",
 			"terminalDataWriteEvent"
 		]
 	},

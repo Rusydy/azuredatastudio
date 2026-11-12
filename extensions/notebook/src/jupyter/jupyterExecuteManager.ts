@@ -44,7 +44,7 @@ export class JupyterExecuteManager implements nb.ExecuteManager, vscode.Disposab
 			void this._sessionManager.shutdownAll().then(() => this._sessionManager.dispose());
 		}
 		if (this._serverManager) {
-			this._serverManager.stopServer().then(success => undefined, error => vscode.window.showErrorMessage(error));
+			this._serverManager.stopServer().then((): void => undefined, error => vscode.window.showErrorMessage(error));
 		}
 	}
 }

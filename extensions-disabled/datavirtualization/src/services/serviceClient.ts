@@ -65,7 +65,9 @@ export class ServiceClient {
 				resolve();
 			}, e => {
 				TelemetryReporter.sendTelemetryEvent('ServiceInitializingFailed');
-				this.apiWrapper.showErrorMessage(localize('serviceStartFailed', 'Failed to start {0}: {1}', Constants.serviceName, e));
+				const errorMessage = String(e);
+				console.error(`Failed to start ${Constants.serviceName}: ${errorMessage}`);
+				this.apiWrapper.showErrorMessage(localize('serviceStartFailed', 'Failed to start {0}: {1}', Constants.serviceName, errorMessage));
 				// Just resolve to avoid unhandled promise. We show the error to the user.
 				resolve();
 			});

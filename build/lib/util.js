@@ -11,7 +11,6 @@ const _filter = require("gulp-filter");
 const rename = require("gulp-rename");
 const path = require("path");
 const fs = require("fs");
-const _rimraf = require("rimraf");
 const VinylFile = require("vinyl");
 const url_1 = require("url");
 const ternaryStream = require("ternary-stream");
@@ -233,21 +232,9 @@ function rewriteSourceMappingURL(sourceMappingURLBase) {
 }
 exports.rewriteSourceMappingURL = rewriteSourceMappingURL;
 function rimraf(dir) {
-    const result = () => new Promise((c, e) => {
-        let retries = 0;
-        const retry = () => {
-            _rimraf(dir, { maxBusyTries: 1 }, (err) => {
-                if (!err) {
-                    return c();
-                }
-                if (err.code === 'ENOTEMPTY' && ++retries < 5) {
-                    return setTimeout(() => retry(), 10);
-                }
-                return e(err);
-            });
-        };
-        retry();
-    });
+    const result = async () => {
+        await fs.promises.rm(dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 10 });
+    };
     result.taskName = `clean-${path.basename(dir).toLowerCase()}`;
     return result;
 }

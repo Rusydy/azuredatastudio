@@ -22,7 +22,7 @@
 	"capabilities": {
 		"virtualWorkspaces": false,
 		"untrustedWorkspaces": {
-		  "supported": true
+			"supported": true
 		}
 	},
 	"forceReload": true,
@@ -385,12 +385,12 @@
 		"snippets": []
 	},
 	"dependencies": {
-		"fs-extra": "^8.1.0",
+		"fs-extra": "^11.4.1",
 		"openurl": "^1.1.1",
-		"vscode-nls": "^5.0.0"
+		"vscode-nls": "^5.2.0"
 	},
 	"devDependencies": {
-		"@types/fs-extra": "8.1.0"
+		"@types/fs-extra": "11.0.4"
 	},
 	"__metadata": {
 		"id": "12",
